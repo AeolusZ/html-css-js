@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS盒模型 </title>
+    <style meta="screen">
+        html * {
+            margin: 0;
+            padding: 0
+        }
+    </style>
+</head>
+<body>
+    <section id="sec">
+        <style meta="screen">
+            #sec {
+                background: red
+            }
+            .child {
+                height: 100px;
+                background: green;
+                margin-top: 10px;
+            }
+        </style>
+        <article class="child"></article>
+    </section>
+
+    <!-- BFC元素内垂直方向元素重叠 -->
+    <section  id="margin">
+        <style media="screen">
+            #margin{
+                background: pink;
+                overflow: hidden;
+            }
+            #margin>p,
+            div>p{
+                margin: 5px auto 25px;
+                background: red;
+            }
+        </style>
+        <p>1</p>
+        <!-- 解决边距重叠 创建一个BFC-->
+        <div style="overflow:hidden">
+            <p>2</p>
+        </div>
+        <p>3</p>
+    </section>
+
+    <!-- 布局时BFC应用 -->
+    <section id="layout">
+        <style media="screen">
+            #layout{
+                margin-top: 10px;
+                background: red;
+            }
+            #layout .left{
+                float: left;
+                width: 100px;
+                height: 100px;
+                background: pink;
+            }
+            #layout .right{
+                height: 110px;
+                background:#ccc;
+                /* 创建BFC解决右边与左边重叠问题 BFC区域不与浮动元素重叠 */
+                overflow: auto
+            }
+        </style>
+        <div class="left"></div>
+        <div class="right"></div>
+    </section>
+
+    <!-- 清除浮动 -->
+    <section id="float">
+        <style media="screen">
+            #float{
+                background: red;
+                margin-top: 10px;
+                /* BFC子元素即使是float也会参与计算 */
+                overflow: hidden;
+            }
+            #float .float{
+                float: left;
+                font-size: 30px;
+            }
+        </style>
+        <q id='qq'>hahahhhhh</q>
+        <div class="float">我是浮动元素</div>
+    </section>
+</body>
+<script type="text/javascript">
+    var qq = document.getElementById('sec')
+    console.log(qq.style.width)
+    console.log(window.getComputedStyle(qq).width, window.getComputedStyle(qq).height)
+    console.log(qq.getBoundingClientRect().width, qq.getBoundingClientRect().height)
+</script>
+</html>

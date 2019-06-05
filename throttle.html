@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数节流和函数防抖</title>
+</head>
+<body>
+    <div id='throttle' style="height: 10000px">嘿嘿嘿</div>
+</body>
+<script>
+    // 函数防抖
+    function resize() {
+        console.log('resize')
+        console.log(this)
+    }
+    function debounce(func, context) {
+        clearTimeout(func.timer)
+        func.timer = setTimeout(function() {
+            func.call(context)
+        }, 500)
+    }
+    window.onresize = () => debounce(resize, window)
+    // 函数节流
+    var canRun = true;
+    window.onscroll = function(){
+        if(!canRun){
+            return
+        }
+        canRun = false
+        setTimeout(function () {
+            console.log("函数节流")
+            canRun = true
+        }, 500)
+    }
+    // 函数柯里化，利用call实现
+    function curry(fn) {  
+        return function curried() {
+            // console.log(arguments)                           
+            var args = [].slice.call(arguments);
+            // console.log(args, args.length, fn.length)
+            return args.length >= fn.length ?
+                fn.apply(null, args) :
+                function () {
+                    // console.log(arguments)
+                    var rest = [].slice.call(arguments);
+                    return curried.apply(null, args.concat(rest));
+                }; 
+        };
+    }
+    function add(a,b,c) { 
+        console.log(a, b, c) ;
+        return a+b+c; 
+    }
+    var curriedAdd = curry(add);  
+    curriedAdd(1)(2)(3);  
+    curriedAdd(1)(2,3);
+    function curry2(fn) {  
+        return function curried() {                           
+            var args = [].slice.call(arguments),
+            context = this
+            console.log(context)
+            return args.length >= fn.length ?
+                fn.apply(context, args) :
+                function () {
+                    // console.log(arguments)
+                    var rest = [].slice.call(arguments);
+                    return curried.apply(context, args.concat(rest));
+                }; 
+        };
+    }
+    var border = {  
+        style: 'border',
+        generate: function(length, measure, type, color) {
+            console.log([this.style + ':', length + measure, type, color].join(' ') +';')
+            return [this.style + ':', length + measure, type, color].join(' ') +';';
+        }
+    };
+ 
+    border.curriedGenerate = curry2(border.generate);
+ 
+    border.curriedGenerate(2)('px')('solid')('#369')
+    // 偏函数
+    function apply(fn /* partial arguments... */) {  
+        var args = [].slice.call(arguments, 1);
+        return function() {
+            var _args = [].slice.call(arguments);
+            return fn.apply(this, args.concat(_args));
+        }
+    }  
+</script>
+</html>

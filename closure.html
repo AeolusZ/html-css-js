@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>闭包</title>
+    <style>
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+<script type="text/javascript">
+    //闭包坑点1:引用的变量可能发生变化
+    function outer() {
+        var result = [];
+        for (var i = 0; i < 10; i++) {
+            result[i] = function() {
+               console.log(i)
+            }
+        }
+        return result
+    }
+    var result = outer()
+    for(var i = 0; i < result.length ; i++) {
+        result[i]()
+    }
+    // 修改
+    function outer1() {
+        var result = [];
+        for (var i = 0; i < 10; i++) {
+            result[i] = function(num) {
+               return function(){console.log(num)}
+            }(i)
+        }
+        return result
+    }
+    var result1 = outer1()
+    for(var i = 0; i < result.length ; i++) {
+        result1[i]()
+    }
+
+    // 闭包坑点2:this指向问题
+    var object = {
+        age: 'object',
+        getAge: function(){
+            return function() {
+                console.info(this.age)
+            }
+        }
+    }
+    object.getAge()() //打印出undefined，因为this指向window     
+    
+    // 闭包坑点3:内存泄露问题
+    function showId() {
+        var el = document.getElementById('app')
+        el.onclick = function(){
+            alert(el.id)   // 这样会导致闭包引用外层的el，当执行完showId后，el无法释放
+        }         
+    }
+    function  showId1() {
+        var el = document.getElementById("app")
+        var id  = el.id
+        el.onclick = function(){
+            alert(id)
+        }
+        el = null    // 主动释放el
+    }
+
+    // 闭包技巧1：用闭包解决递归调用问题
+    function  factorial(num) {
+        if(num<= 1) {
+            return 1;
+        } else {
+            return num * factorial(num-1)
+        }
+    }
+    var anotherFactorial = factorial
+    // factorial = null //释放了就不能递归了
+    console.log(anotherFactorial(4))
+    // 解决
+    newFactorial = function f(num){
+        if(num<1) {return 1}
+        else {
+            return num* f(num-1)
+        }
+    }
+    console.log(newFactorial(4)) //这样就没有问题了，实际上起作用的是闭包函数f，而不是外面的函数newFactorial
+
+    // 闭包技巧2：用闭包模仿块级作用域
+    for(var i=0; i<10; i++){
+        console.info(i)
+    }
+    alert(i)  // 变量提升，弹出10 
+    // 解决
+    var block = function() {
+        for (var j = 0; j < 10; j++) {
+            console.info(j)
+        }
+    }()
+    // alert(j)
+
+var name = 'global';
+
+var obj = {
+    name : 'obj',
+    dose : function(){
+        this.name = 'dose';
+        return function(){
+            return this.name;
+        }.bind(this)
+    }
+}
+
+alert(obj.dose().call(this))
+    </script>
+</html>

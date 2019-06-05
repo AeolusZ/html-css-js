@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event</title>
+</head>
+<body>
+    <div id="ev">
+        <style media="screen">
+            #ev{
+                width: 300px;
+                height: 100px;
+                background: red;
+                color: #fff;
+                text-align: center;
+                line-height: 100px;
+            }
+        </style>
+        目标元素
+        <button onclick="changeColor()">变色</button>
+    </div>
+    <ul type="submit" onclick="alertDocument()">
+        <li>点击第一个li</li>
+        <li>点击第二个li</li>
+        <li>点击第二个li</li>
+        <li>点击第三个li</li>
+        <li>点击第四个li</li>
+        <li>点击第五个li</li>
+        <li>点击第六个li</li>
+    </ul>
+    <script type='text/javascript'>
+    var ev=document.getElementById('ev');
+    // 事件捕获
+    window.addEventListener('click', function(){
+        console.log('window capture')
+    },true)
+    document.addEventListener('click', function(){
+        console.log('document capture')
+    },true)
+    document.documentElement.addEventListener('click', function(){
+        console.log('html capture')
+    },true)
+    document.body.addEventListener('click', function(){
+        console.log('body capture')
+    },true)
+    ev.addEventListener('click', function() {
+        console.log('ev capture')
+    },true)
+
+    // 事件冒泡
+    window.addEventListener('click', function(){
+        console.log('window capture')
+    })
+    document.addEventListener('click', function(){
+        console.log('document capture')
+    })
+    document.documentElement.addEventListener('click', function(){
+        console.log('html capture')
+    })
+    document.body.addEventListener('click', function(){
+        console.log('body capture')
+    })
+    ev.addEventListener('click', function() {
+        console.log('ev capture')
+    })
+
+    // 事件流应用
+    function alertDocument(){
+        event.stopPropagation()
+        console.log(event.currentTarget)
+        alert(event.target.innerHTML)
+    }
+
+    // 自定义事件应用
+    var num = 0;
+    // 自定义事件1
+    var eve = new Event('test')
+    // 定义
+    ev.addEventListener('test', function(){
+        ev.style.color = num%2===0 ? 'white': 'black'
+    })
+    function changeColor(){
+        num++;
+        // 触发
+        ev.dispatchEvent(eve)
+    }
+    // 自定义事件2
+    var eve2 = new CustomEvent('test2', {
+       detail: ['miao', 'wang'] 
+    })
+    // 定义
+    ev.addEventListener('test2', function(){
+        console.log(event)
+        console.log('test dispatch'+ ' ' + event.detail[0])
+        event.stopImmediatePropagation()
+    })
+    ev.addEventListener('test2', function(){
+        console.log('22222222222')
+        console.log('test dispatch'+ ' ' + event.detail[1])
+    })
+    // 触发
+    ev.dispatchEvent(eve2)
+    </script>
+</body>
+</html>

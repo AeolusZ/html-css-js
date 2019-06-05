@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/encode.js" charset="utf-8"></script>
+    <script src="/javascripts/domParse.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      var parse = function(str) {
+        // parse最后所转换的结果
+        var results = ''
+        try {
+          HTMLParser(he.unescape(str, {strict:true}), {
+            // 开始标签
+            start:function(tag, attrs, unary){
+              // 过滤危险的标签
+              if(tag==='script' || tag==='style'|| tag==='img'||tag==='link'||tag==='iframe'||tag==='frame') return;
+              results+='<'+tag;
+              // 过滤事件属性
+              // for(var i = 0,len=attrs.length;i<len;i++) {
+              //   results+=" "+attrs[i].name+'="'+attrs[i].escaped+'"'
+              // }
+              // unary是否为单标签
+              results+=(unary?"/":"")+">"
+            },
+            // 结束标签
+            end:function(tag){
+              console.log(tag)
+              results+="</"+tag+">"
+            },
+            // 两个标签之间内容
+            chars:function(text){
+              results+=text
+            },
+            // 注释部分
+            comment:function(text){
+              results+="<!--"+text+"-->";
+            }
+          });
+          return results
+        } catch(e) {
+          console.log(e)
+        } finally {
+
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    <textarea name="name" id="txt" cols="80" rows="8">
+      <p>sks <img src="null" alt="" onerror="alert(1)"></p>
+    </textarea>
+    <button type="button" name="button" id="btn">评论</button>
+    <button type="button" name="button" id="get">获取评论</button>
+
+    <script type="text/javascript">
+      var btn = document.getElementById('btn')
+      var get = document.getElementById('get')
+      var txt = document.getElementById('txt')
+
+      btn.addEventListener('click', function(){
+        var xhr = new XMLHttpRequest();
+        var url = ("comment?comment="+txt.value).replace(/(^\s*)|(\s*$)/g, '');
+        xhr.open('GET', url, true)
+        xhr.onreadystatechange = function(){
+          console.log(xhr.readyState)
+          if(xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 304) {
+              console.log(xhr)
+            } else {
+              console.log(xhr.status)
+              console.log('error')
+            }
+          }
+        }
+        xhr.send()
+      });
+      get.addEventListener('click', function() {
+        var xhr = new XMLHttpRequest();
+        var url = '/getComment';
+        xhr.open('GET', url, true)
+        xhr.onreadystatechange = function(){
+          if(xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 304) {
+              var com=parse(JSON.parse(xhr.response).comment)
+              var txt=document.createElement('span')
+              txt.innerHTML=com;
+              document.body.appendChild(txt);
+            } else {
+              console.log('error')
+            }
+          }
+        }
+        xhr.send()
+      }, true)
+    </script>
+  </body>
+</html>

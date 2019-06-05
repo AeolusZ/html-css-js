@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>深拷贝与浅拷贝</title>
+</head>
+<body>
+    
+</body>
+<script>
+    var a = {
+        name: 'aname',
+        author: {
+            author1: 'aauthor1',
+            author2: 'aauthor2'
+        }
+    }
+    var b = {
+        name: 'bname',
+        author: {
+            author1: 'bauthor1',
+            author2: 'bauthor2'
+        }
+    }
+    // 深拷贝
+    function deepCopy(p, c) {
+        var c = c || {};
+        for (let i in p) {
+            if (typeof(p[i]) === 'object') {
+                c[i] = p[i].constructor === 'Array' ? [] : {}
+                deepCopy(p[i],c[i])
+            } else {
+                c[i] = p[i]
+            }
+        }
+        return c
+    }
+    // 浅拷贝
+    function lightCopy(p) {
+        var c = {};
+        for (let i in p) {
+            c[i] = p[i]
+        }
+        return c
+    }
+    var c = deepCopy(a)
+    var d = lightCopy(b)
+    console.log(c,d)
+</script>
+</html>

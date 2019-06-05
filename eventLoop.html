@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件循环</title>
+    <style>
+    </style>
+    <script type="text/javascript">
+    window.onload = function(){
+        console.log('1, time = ' + new Date().toString())
+        setTimeout(macroCallback, 0);
+        new Promise(function(resolve, reject) {
+            console.log('2, time = ' + new Date().toString())
+            resolve();
+            console.log('3, time = ' + new Date().toString())
+        }).then(microCallback);
+        function macroCallback() {
+            console.log('4, time = ' + new Date().toString())
+        } 
+
+        function microCallback() {
+            console.log('5, time = ' + new Date().toString())
+        }
+
+        console.log('-----设置一个定时器，每隔一秒打印一个数字，打印到5时停止定时器-----------')
+        let i = 1
+        let timer1 = setInterval(function(){
+            console.log(i);
+            i++
+            if (i === 6) {
+                clearInterval(timer1)
+            }
+        }, 1000)
+    }
+        
+        
+    </script>
+</head>
+<body>
+</body>
+</html>

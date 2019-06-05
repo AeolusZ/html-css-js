@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>position</title>
+    <style meta="screen">
+        html * {
+            padding: 0;
+            margin: 0
+        }
+        .section {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <style meta="screen">
+            .part {
+                width: 100px;
+                height: 100px;
+            }
+            .part1 {
+                background-color: red;
+            }
+            .part2 {
+                /* margin-top: 200px;
+                margin-left: 200px; */
+                position: fixed;
+                top: 200px;
+                left: 200px;
+                background-color: green;
+            }
+            .part3 {
+                background-color: blue;
+            }
+        </style>
+        <article class="article">
+            <p class="part part1">第一部分</p>
+            <p class="part part2">第二部分</p>
+            <p class="part part3">第三部分</p>
+        </article>
+    </section>
+</body>
+</html>

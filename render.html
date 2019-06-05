@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>渲染解析流程</title>
+    <link rel="stylesheet" href="./css/style.css"/>
+    <script src="./js/func.js" type="text/javascript" defer></script>
+    <script src="./js/func1.js" type="text/javascript" defer></script>
+    <style>
+    </style>
+    <script type="text/javascript">
+    console.log('4', document.getElementById('root'))
+    window.addEventListener('DOMContentLoaded', function() {
+        console.log('5', document.getElementById('root'))
+    })
+    window.onload = function(){
+        console.log('1', document.getElementById('root'))
+        console.log('123')
+        document.getElementsByTagName('button')[0].onclick = function(){
+            console.log('handle')
+        } 
+    }
+        
+        
+    </script>
+</head>
+<body>
+    <div>渲染解析流程</div>
+    <div id="root"></div>
+    <button>点击</button>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>float</title>
+    <style meta="screen">
+        html *{
+            padding: 0;
+            margin: 0;
+        }
+        .section {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <style meta="screen">
+            .content {
+                width: 500px;
+            }
+            .img {
+                height: 100px;
+                width: 100px;
+                background-color: blue;
+                float: right;
+            }
+        </style>
+        <article class="content">
+            <div class="img">这是一张图片</div>
+            This is some text. This is some text. This is some text.
+            This is some text. This is some text. This is some text.
+            This is some text. This is some text. This is some text.
+            This is some text. This is some text. This is some text.
+            This is some text. This is some text. This is some text.
+            This is some text. This is some text. This is some text.
+            This is some text. This is some text. This is some text.
+            This is some text. This is some text. This is some text.
+            This is some text. This is some text. This is some text.
+            This is some text. This is some text. This is some text.
+        </article>
+    </section>
+    <section class="section">
+        <style meta="screen">
+            .part{
+                width: 30%;
+                float: left;
+            }
+            .part1{
+                height: 100px;
+                background-color: red
+            }
+            .part2{
+                height: 120px;
+                background-color: green
+            }
+            .part3{
+                height: 100px;
+                background-color: yellow
+            }
+            .part4{
+                height: 100px;
+                background-color: blue
+            }
+            .article1::after {
+                content: '';
+                display: block;
+                clear: both;
+            }
+            .article2 {
+                width: 95%;
+                height: 500px;
+                background-color: coral
+            }
+        </style>
+        <article class="article1">
+            <p class="part part1">第一个块</p>
+            <p class="part part2">第二个块</p>
+            <p class="part part3">第三个块</p>
+            <p class="part part4">第四个块</p>
+        </article>
+        <article class="article2">
+            要清除浮动才能正常展示的部分
+        </article>
+    </section>
+</body>
+</html>
